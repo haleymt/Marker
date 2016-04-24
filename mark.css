@@ -1,0 +1,72 @@
+body {
+  background: rgba(0,0,0,0.05);
+}
+
+#main {
+  text-align: center;
+  display: inline-block;
+  width: calc(100% - 60px);
+  padding: 30px;
+  overflow: auto;
+}
+
+h1 {
+  font-family: sans-serif;
+}
+
+.panel {
+  display: inline-block;
+  width: 48%;
+  min-height: 450px;
+}
+
+#panel1 {
+  float: left;
+}
+
+#panel2 {
+  float: right;
+}
+
+code {
+  background: rgba(0,0,0,0.0.5) !important;
+  border-radius: 3px;
+  border: 1px solid rgba(0,0,0,0.0.1) !important;
+}
+
+#converted, #text {
+  background: white;
+  border: 1px solid rgba(0,0,0,0.1);
+  font-family: sans-serif;
+  font-size: 14px;
+  min-height: 400px;
+  padding: 10px;
+  text-align: left;
+}
+
+#text {
+  resize: vertical;
+  width: calc(100% - 25px);
+}
+
+#converted .placeholder {
+  opacity: 0.5;
+}
+
+.buttons {
+  margin-bottom: 15px;
+}
+
+button {
+  border: 1px solid #02CEFF;
+  border-radius: 3px;
+  background: #71d4ec;
+  color: white;
+  padding: 5px 10px;
+  margin: 10px;
+}
+
+button:hover {
+  cursor: pointer;
+  background: darken(#71d4ec, 15%);
+}
