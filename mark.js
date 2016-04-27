@@ -120,6 +120,12 @@ function getNodeType(nodes) {
     return { type: 'p' };
   } else if (listType) {
     return listType;
+  } else if (line.slice(0, 7) === '###### ') {
+    return { type: 'h6', slice: 7 };
+  } else if (line.slice(0, 6) === '##### ') {
+    return { type: 'h5', slice: 6 };
+  } else if (line.slice(0, 5) === '#### ') {
+    return { type: 'h4', slice: 5 };
   } else if (line.slice(0, 4) === '### ') {
     return { type: 'h3', slice: 4 };
   } else if (line.slice(0, 3) === '## ') {
