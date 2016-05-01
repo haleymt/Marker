@@ -74,3 +74,8 @@ button:hover {
 ul.task-list {
   list-style-type: none;
 }
+
+blockquote {
+  border-left: 3px solid gray;
+  padding-left: 15px;
+}

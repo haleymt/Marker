@@ -61,13 +61,14 @@ function getLastValidListIndex(nodes) {
   const taskList = isTaskListLine(nodes[0]);
 
   for (let i = 0; i < nodes.length; i++) {
-    if (!nodes[i + 1])
+    if (!nodes[i + 1]) {
       return lastValidIndex;
+    }
 
     const node = nodes[i];
 
     if (taskList) {
-      if (isTaskListLine(node)) {
+      if (isTaskListLine(nodes[i + 1])) {
         lastValidIndex += 1;
       } else {
         return lastValidIndex;
@@ -131,6 +132,7 @@ function getNodeType(nodes) {
   const nextLine = nodes[1];
   const listType = getListType(nodes); // eslint-disable-line
   let lastIndex = 0;
+  console.log(line);
 
   if (line === '') {
     return { type: 'p' };
@@ -148,7 +150,7 @@ function getNodeType(nodes) {
   let h2, h1;
   if (nextLine) {
     const matches = nextLine.match(/(.)\1*/);
-
+    console.log(matches);
     h2 = matches && nextLine[0] === '-' && matches[0] === nextLine;
     h1 = matches && nextLine[0] === '=' && matches[0] === nextLine;
   }
@@ -216,7 +218,7 @@ function getListType(nodes) {
   if (type) {
     const lastIndex = getLastValidIndex(nodes, 'list');
 
-    if (lastIndex > 0) {
+    if (lastIndex > 0 || taskList) {
       return { type, lastIndex, taskList };
     }
   }
