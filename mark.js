@@ -18,6 +18,10 @@ function escapeHTML(text) {
       .replace(/>/g, '&gt;');
 }
 
+function isTaskListLine(line) {
+  return line[0] === '-' && line[1] === '[' && (line[2] === ']' || (line[2] === 'X' && line[3] === ']'));
+}
+
 /* GET FUNCTIONS
   these get the node content to be converted to HTML
 */
@@ -54,12 +58,22 @@ function getLeadingSpaces(string) {
 
 function getLastValidListIndex(nodes) {
   let lastValidIndex = 0;
+  const taskList = isTaskListLine(nodes[0]);
 
   for (let i = 0; i < nodes.length; i++) {
     if (!nodes[i + 1])
       return lastValidIndex;
 
     const node = nodes[i];
+
+    if (taskList) {
+      if (isTaskListLine(node)) {
+        lastValidIndex += 1;
+      } else {
+        return lastValidIndex;
+      }
+    }
+
     const leadingSpaces = getLeadingSpaces(node);
     const nextLeadingSpaces = getLeadingSpaces(nodes[i + 1]);
 
@@ -114,30 +128,45 @@ function getLastValidListIndex(nodes) {
 
 function getNodeType(nodes) {
   const line = nodes[0];
+  const nextLine = nodes[1];
   const listType = getListType(nodes); // eslint-disable-line
+  let lastIndex = 0;
 
   if (line === '') {
     return { type: 'p' };
   } else if (listType) {
     return listType;
   } else if (line.slice(0, 7) === '###### ') {
-    return { type: 'h6', slice: 7 };
+    return { type: 'h6', slice: 7, lastIndex };
   } else if (line.slice(0, 6) === '##### ') {
-    return { type: 'h5', slice: 6 };
+    return { type: 'h5', slice: 6, lastIndex };
   } else if (line.slice(0, 5) === '#### ') {
-    return { type: 'h4', slice: 5 };
+    return { type: 'h4', slice: 5, lastIndex };
   } else if (line.slice(0, 4) === '### ') {
-    return { type: 'h3', slice: 4 };
-  } else if (line.slice(0, 3) === '## ') {
-    return { type: 'h2', slice: 3 };
-  } else if (line.slice(0, 2) === '# ') {
-    return { type: 'h1', slice: 2 };
+    return { type: 'h3', slice: 4, lastIndex };
+  }
+  let h2, h1;
+  if (nextLine) {
+    const matches = nextLine.match(/(.)\1*/);
+
+    h2 = matches && nextLine[0] === '-' && matches[0] === nextLine;
+    h1 = matches && nextLine[0] === '=' && matches[0] === nextLine;
+  }
+
+  if (line.slice(0, 3) === '## ' || h2) {
+    if (h2) lastIndex += 1;
+    return { type: 'h2', slice: 3, lastIndex };
+  } else if (line.slice(0, 2) === '# ' || h1) {
+    if (h1) lastIndex += 1;
+    return { type: 'h1', slice: 2, lastIndex };
+  } else if (line[0] === '-' && line[1] === '[' && (line[2] === ']' || (line[2] === 'X' && line[3] === ']'))) {
+    return { type: 'checklist', checked: line[2] === ']' };
   } else if (line[0] === '>') {
     return { type: 'blockquote' };
   } else if (line.slice(0, 3) === '```' && line.trim().length === 3 ) {
-    const lastIndex = _.findIndex(nodes.slice(1), (l) => l.slice(0, 3) === '```' && l.trim().length === 3);
-    if (lastIndex > -1)
-      return { type: 'codeblock', lastIndex };
+    lastIndex = _.findIndex(nodes.slice(1), (l) => l.slice(0, 3) === '```' && l.trim().length === 3);
+
+    if (lastIndex > -1) return { type: 'codeblock', lastIndex };
   }
 
   return { type: 'none' };
@@ -180,14 +209,15 @@ function getLastValidIndex(nodes, type) {
 }
 
 function getListType(nodes) {
-  const firstChar = nodes[0][0];
-  const type = firstChar === '*' ? 'ul' : (firstChar === '1' && nodes[0][1] === '.') ? 'ol' : false;
+  const line = nodes[0];
+  const taskList = isTaskListLine(line);
+  const type = taskList || line[0] === '*' ? 'ul' : (line[0] === '1' && line[1] === '.') ? 'ol' : false;
 
   if (type) {
     const lastIndex = getLastValidIndex(nodes, 'list');
 
     if (lastIndex > 0) {
-      return { type, lastIndex };
+      return { type, lastIndex, taskList };
     }
   }
 
@@ -329,16 +359,36 @@ function convertInlineStyles(str) {
 }
 
 function convertList(nodes, type) {
-  if (type === 'ul' || type === 'ol') {
-    return '<' + type + '>' + convertList(nodes, 'li') + '</' + type + '>';
-  } if (type === 'li') {
-    let converted = '';
-    for (let i = 0; i < nodes.length; i++) {
-      const leadingSpaces = getLeadingSpaces(nodes[i]);
-      const slice = nodes[i][leadingSpaces] === '*' ? nodes[i].indexOf('*') + 1 : nodes[i].indexOf('.') + 1;
-      converted += '<li>' + convertInlineStyles(nodes[i].slice(slice));
+  let converted = '';
 
-      if (nodes[i + 1]) {
+  if (type === 'ul' || type === 'ol') {
+    converted += '<' + type;
+    if (isTaskListLine(nodes[0])) {
+      converted += ' class="task-list"';
+    }
+
+    converted += '>' + convertList(nodes, 'li') + '</' + type + '>';
+  } else if (type === 'li') {
+    for (let i = 0; i < nodes.length; i++) {
+      let slice;
+      const taskList = isTaskListLine(nodes[i]);
+
+      if (taskList) {
+        slice = nodes[i].indexOf(']') + 1;
+      } else {
+        const leadingSpaces = getLeadingSpaces(nodes[i]);
+        slice = nodes[i][leadingSpaces] === '*' ? nodes[i].indexOf('*') + 1 : nodes[i].indexOf('.') + 1;
+      }
+
+      converted += '<li>';
+
+      if (taskList) {
+        converted += '<input type="checkbox"' + (slice === 3 ? '' : ' checked') + ' disabled />';
+      }
+
+      converted += convertInlineStyles(nodes[i].slice(slice));
+
+      if (nodes[i + 1] && !taskList) {
         const nextLeadingSpaces = getLeadingSpaces(nodes[i + 1]);
 
         if (leadingSpaces < nextLeadingSpaces) {
@@ -353,9 +403,8 @@ function convertList(nodes, type) {
         converted += '</li>';
       }
     }
-
-    return converted;
   }
+  return converted;
 }
 
 function convertAll(html) {
@@ -385,6 +434,7 @@ function convertAll(html) {
       // is header
     } else if (nodeType.type === 'h1' || nodeType.type === 'h2' || nodeType.type === 'h3') {
       converted += '<' + nodeType.type + '>' + convertInlineStyles(line.slice(nodeType.slice)) + '</' + nodeType.type + '>';
+      i += nodeType.lastIndex;
 
       // is blockquote
     } else if (nodeType.type === 'blockquote') {
