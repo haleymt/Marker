@@ -70,3 +70,12 @@ button:hover {
   cursor: pointer;
   background: darken(#71d4ec, 15%);
 }
+
+ul.task-list {
+  list-style-type: none;
+}
+
+blockquote {
+  border-left: 3px solid gray;
+  padding-left: 15px;
+}
