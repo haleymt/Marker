@@ -1,10 +1,10 @@
 # Marker
 
-A simple Markdown to HTML converter.
+A simple Markdown to HTML converter. [Try it out.](https://haleymt.github.io/Marker)
 
 ## Supported styles
 
-__Inline styles__
+###### Inline styles
 
 \* emphasis \* and \_ emphasis \_
 
@@ -25,7 +25,7 @@ __Inline styles__
 `code`
 
 
-__Links__
+###### Links
 
 \[ this links to google \]\(google.com "A Title"\)
 
@@ -34,11 +34,11 @@ __Links__
 [ this links to google ](google.com "A Title")
 
 
-__HR__
+###### HR
 
-\* \* \*
-\- \- \-
-\*\*\*
+\* \* \*        
+\- \- \-         
+\*\*\*       
 \-\-\-
 
 `<hr>`
@@ -46,14 +46,14 @@ __HR__
 -----
 
 
-__Paragraphs__
+###### Paragraphs
 
 Two new lines will create a new paragraph. One will create a `<br>`:
 
-This is my first paragraph of text.
+This is my first paragraph of text.       
 This is the paragraph's second line.
 
-This is the second paragraph.
+This is the second paragraph.       
 This is the second paragraph's second line.
 
 ```
@@ -68,7 +68,7 @@ This is the second paragraph's second line.
 ```
 
 
-__Code blocks__
+###### Code blocks
 
 \`\`\`
 This is some fake code
@@ -85,8 +85,25 @@ This is some fake code
 
 ```
 
+###### Block quotes
 
-__Headers__
+\> dflkdjfg       
+\> dfgdfg       
+\> sdfsdf
+
+```
+<blockquote>
+dflkdjfg
+dfgdfg
+sdfsdf
+</blockquote>
+```
+
+> dflkdjfg
+> dfgdfg
+> sdfsdf
+
+###### Headers
 
 \# H1 or H1
          \-\-\-
@@ -127,11 +144,11 @@ __Headers__
 ###### H6
 
 
-__Lists__
+###### Lists
 
 unordered lists:
-\* one
-\* two
+\* one       
+\* two      
 \* three
 
 ```
@@ -147,8 +164,8 @@ unordered lists:
 * three
 
 ordered lists:
-1\. one
-2\. two
+1\. one        
+2\. two        
 3\. three
 
 ```
@@ -164,8 +181,8 @@ ordered lists:
 3. three
 
 task lists:
--\[] not done
--\[X] done
+-\[] not done         
+-\[X] done        
 -\[] not done
 
 ```
