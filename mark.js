@@ -22,6 +22,12 @@ function isTaskListLine(line) {
   return line[0] === '-' && line[1] === '[' && (line[2] === ']' || (line[2] === 'X' && line[3] === ']'));
 }
 
+function isHR(line) {
+  const noSpaces = line.replace(/\s+/g, '');
+  const matches = noSpaces.match(/(.)\1*/);
+  return (matches && matches[0] === noSpaces && (noSpaces[0] === '*' || noSpaces[0] === '-'));
+}
+
 /* GET FUNCTIONS
   these get the node content to be converted to HTML
 */
@@ -132,7 +138,6 @@ function getNodeType(nodes) {
   const nextLine = nodes[1];
   const listType = getListType(nodes); // eslint-disable-line
   let lastIndex = 0;
-  console.log(line);
 
   if (line === '') {
     return { type: 'p' };
@@ -147,20 +152,22 @@ function getNodeType(nodes) {
   } else if (line.slice(0, 4) === '### ') {
     return { type: 'h3', slice: 4, lastIndex };
   }
-  let h2, h1;
+
+  let isH2, isH1;
   if (nextLine) {
     const matches = nextLine.match(/(.)\1*/);
-    console.log(matches);
-    h2 = matches && nextLine[0] === '-' && matches[0] === nextLine;
-    h1 = matches && nextLine[0] === '=' && matches[0] === nextLine;
+    isH2 = matches && nextLine[0] === '-' && matches[0] === nextLine;
+    isH1 = matches && nextLine[0] === '=' && matches[0] === nextLine;
   }
 
-  if (line.slice(0, 3) === '## ' || h2) {
-    if (h2) lastIndex += 1;
+  if (line.slice(0, 3) === '## ' || isH2) {
+    if (isH2) lastIndex += 1;
     return { type: 'h2', slice: 3, lastIndex };
-  } else if (line.slice(0, 2) === '# ' || h1) {
-    if (h1) lastIndex += 1;
+  } else if (line.slice(0, 2) === '# ' || isH1) {
+    if (isH1) lastIndex += 1;
     return { type: 'h1', slice: 2, lastIndex };
+  } else if (isHR(line)) {
+    return { type: 'hr' };
   } else if (line[0] === '-' && line[1] === '[' && (line[2] === ']' || (line[2] === 'X' && line[3] === ']'))) {
     return { type: 'checklist', checked: line[2] === ']' };
   } else if (line[0] === '>') {
@@ -446,6 +453,8 @@ function convertAll(html) {
       converted += '<blockquote><div class="blockquote-bar"></div>' + convertAll(children.join('<br>')) + '</blockquote>';
       i = lastIndex - 1;
 
+    } else if (nodeType.type === 'hr') {
+      converted += '<hr>';
       // is paragraph
     } else {
       lastIndex = getLastValidIndex(currentLines, 'p') + i;
