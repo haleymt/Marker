@@ -138,6 +138,7 @@ function getNodeType(nodes) {
   const nextLine = nodes[1];
   const listType = getListType(nodes); // eslint-disable-line
   let lastIndex = 0;
+  let slice = 0;
 
   if (line === '') {
     return { type: 'p' };
@@ -161,11 +162,19 @@ function getNodeType(nodes) {
   }
 
   if (line.slice(0, 3) === '## ' || isH2) {
-    if (isH2) lastIndex += 1;
-    return { type: 'h2', slice: 3, lastIndex };
+    if (isH2) {
+      lastIndex += 1;
+    } else {
+      slice = 3;
+    }
+    return { type: 'h2', slice, lastIndex };
   } else if (line.slice(0, 2) === '# ' || isH1) {
-    if (isH1) lastIndex += 1;
-    return { type: 'h1', slice: 2, lastIndex };
+    if (isH1) {
+      lastIndex += 1;
+    } else {
+      slice = 2;
+    }
+    return { type: 'h1', slice, lastIndex };
   } else if (isHR(line)) {
     return { type: 'hr' };
   } else if (line[0] === '-' && line[1] === '[' && (line[2] === ']' || (line[2] === 'X' && line[3] === ']'))) {
