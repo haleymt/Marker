@@ -28,6 +28,30 @@ function isHR(line) {
   return (matches && matches[0] === noSpaces && (noSpaces[0] === '*' || noSpaces[0] === '-'));
 }
 
+function stripExtraPipes(l) {
+  let line = l;
+  if (line[0] === '|') {
+    line = line.slice(1);
+  }
+
+  if (line[line.length - 1] === '|') {
+    line = line.slice(0, line.length);
+  }
+
+  return line;
+}
+
+function countTableCells(l) {
+  line = stripExtraPipes(l.trim());
+  let count = (line.match(/\|/g) || []).length;
+
+  if (count > 0) {
+    count += 1;
+  }
+
+  return count;
+}
+
 /* GET FUNCTIONS
   these get the node content to be converted to HTML
 */
@@ -133,6 +157,43 @@ function getLastValidListIndex(nodes) {
   return lastValidIndex;
 }
 
+function getLastValidTableIndex(nodes) {
+  const numCells = countTableCells(nodes[0]);
+  let lastValidIndex = 0;
+
+  if (!numCells || !nodes[1] || countTableCells(nodes[1]) !== numCells) {
+    return lastValidIndex;
+  }
+
+  const secondLine = stripExtraPipes(nodes[1]).split('|')
+  for (var i = 0; i < secondLine.length; i++) {
+    let cell = secondLine[i];
+    if (cell[0] === ':') {
+      cell = cell.slice(1);
+    }
+
+    if (cell[cell.length - 1] === ':') {
+      cell = cell.slice(0, cell.length);
+    }
+
+    if (cell[0] !== '-' || !cell.match(/(.)\1*/) || cell.length < 3) {
+      return lastValidIndex;
+    }
+  }
+
+  lastValidIndex += 1;
+
+  for (var j = 2; j < nodes.length; j++) {
+    if (countTableCells(nodes[j]) === numCells) {
+      lastValidIndex += 1;
+    } else {
+      return lastValidIndex;
+    }
+  }
+
+  return lastValidIndex;
+}
+
 function getNodeType(nodes) {
   const line = nodes[0];
   const nextLine = nodes[1];
@@ -185,6 +246,11 @@ function getNodeType(nodes) {
     lastIndex = _.findIndex(nodes.slice(1), (l) => l.slice(0, 3) === '```' && l.trim().length === 3);
 
     if (lastIndex > -1) return { type: 'codeblock', lastIndex };
+  }
+
+  const tableIndex = getLastValidTableIndex(nodes);
+  if (tableIndex > 0) {
+    return { type: 'table', lastIndex: tableIndex };
   }
 
   return { type: 'none' };
@@ -376,6 +442,30 @@ function convertInlineStyles(str) {
   return convertEmphasis(string);
 }
 
+function convertTable(nodes) {
+  let converted = '<table><thead><tr>';
+  const headerCells = stripExtraPipes(nodes[0]).split('|');
+  for (var i = 0; i < headerCells.length; i++) {
+    converted += '<th>' + convertInlineStyles(headerCells[i]) + '</th>';
+  }
+  converted += '</tr></thead><tbody>';
+
+  _.map(nodes.slice(2), (row) => {
+    converted += '<tr>';
+    const cells = stripExtraPipes(row).split('|');
+
+    for (var j = 0; j < cells.length; j++) {
+      converted += '<td>' + convertInlineStyles(cells[j]) + '</td>';
+    }
+
+    converted += '</tr>';
+  });
+
+  converted += '</tbody></table>';
+
+  return converted;
+}
+
 function convertList(nodes, type) {
   let converted = '';
 
@@ -439,7 +529,12 @@ function convertAll(html) {
     // is list
     if (nodeType.type === 'ol' || nodeType.type === 'ul') {
       converted += convertList(lines.slice(i, nodeType.lastIndex + i + 1), nodeType.type);
-      i = nodeType.lastIndex + i;
+      i += nodeType.lastIndex;
+
+    // is table
+    } else if (nodeType.type === 'table') {
+      converted += convertTable(lines.slice(i, nodeType.lastIndex + i + 1));
+      i += nodeType.lastIndex;
 
       // is code block
     } else if (nodeType.type === 'codeblock') {
