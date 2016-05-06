@@ -35,7 +35,7 @@ function stripExtraPipes(l) {
   }
 
   if (line[line.length - 1] === '|') {
-    line = line.slice(0, line.length);
+    line = line.slice(0, line.length - 1);
   }
 
   return line;

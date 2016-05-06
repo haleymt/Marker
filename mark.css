@@ -79,3 +79,17 @@ blockquote {
   border-left: 3px solid gray;
   padding-left: 15px;
 }
+
+table {
+  border-collapse: collapse;
+  border: 1px solid gray;
+}
+
+tbody tr:nth-child(odd) {
+  background: rgba(0,0,0,0.1);
+}
+
+td, th {
+  border: 1px solid gray;
+  padding: 10px;
+}
