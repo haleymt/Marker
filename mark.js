@@ -421,6 +421,18 @@ function convertInlineStyles(str) {
       if (!lastNode || lastNode.type !== 'code' || lastNode.endIndex < i) {
         nodes.push({ type: 'link', link, startIndex: i, endIndex: link.offset + i });
       }
+    } else if (string[i] === '!' && string[i + 1]) {
+      const img = getLink(string.slice(i + 1));
+      if (img) {
+        nodes.push({
+          type: 'img',
+          alt: img.content,
+          url: img.link,
+          title: img.title,
+          startIndex: i,
+          endIndex: link.offset + i + 1
+        });
+      }
     }
   }
 
@@ -436,6 +448,8 @@ function convertInlineStyles(str) {
 
       if (node.type === 'link') {
         converted += `<a href="${node.link.link}" target="_blank" title="${node.link.title}">${node.link.content}</a>`;
+      } else if (node.type === 'img') {
+        converted += `<img src="${node.url}" title="${node.title}" alt="${node.alt}" />`;
       } else {
         converted += '<code>' + escapeHTML(string.slice(sliceEnd + 1, node.endIndex)) + '</code>';
       }
