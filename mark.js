@@ -416,7 +416,7 @@ function convertInlineStyles(str) {
         codeIndexes.concat([i, endIndex]);
         nodes.push({ type: 'code', startIndex: i, endIndex });
       }
-    } else if (link) {
+    } else if (link && (!string[i - 1] || string[i - 1] !== '!')) {
       const lastNode = _.last(nodes);
       if (!lastNode || lastNode.type !== 'code' || lastNode.endIndex < i) {
         nodes.push({ type: 'link', link, startIndex: i, endIndex: link.offset + i });
@@ -430,7 +430,7 @@ function convertInlineStyles(str) {
           url: img.link,
           title: img.title,
           startIndex: i,
-          endIndex: link.offset + i + 1
+          endIndex: img.offset + i + 1
         });
       }
     }
