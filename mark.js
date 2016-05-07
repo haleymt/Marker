@@ -28,17 +28,11 @@ function isHR(line) {
   return (matches && matches[0] === noSpaces && (noSpaces[0] === '*' || noSpaces[0] === '-'));
 }
 
-function stripExtraPipes(l) {
-  let line = l;
-  if (line[0] === '|') {
-    line = line.slice(1);
-  }
+function stripExtraPipes(line) {
+  let startSlice = line[0] === '|' ? 1 : 0;
+  let endSlice = line[line.length - 1] === '|' ? line.length - 1 : line.length;
 
-  if (line[line.length - 1] === '|') {
-    line = line.slice(0, line.length - 1);
-  }
-
-  return line;
+  return line.slice(startSlice, endSlice);
 }
 
 function countTableCells(l) {
@@ -84,6 +78,20 @@ function getLink(text) {
 function getLeadingSpaces(string) {
   const spaces = string.match(/^\s+/);
   return spaces ? spaces[0].length : 0;
+}
+
+function getCellAlignments(line) {
+  const cells = stripExtraPipes(line.trim()).split('|');
+
+  return _.map(cells, function(cell) {
+    if (cell[0] === ':' && cell[cell.length - 1] === ':') {
+      return 'center';
+    } else if (cell[cell.length - 1] === ':') {
+      return 'right';
+    } else {
+      return 'left';
+    }
+  });
 }
 
 function getLastValidListIndex(nodes) {
@@ -445,6 +453,8 @@ function convertInlineStyles(str) {
 function convertTable(nodes) {
   let converted = '<table><thead><tr>';
   const headerCells = stripExtraPipes(nodes[0]).split('|');
+  const cellAlignments = getCellAlignments(nodes[1]);
+
   for (var i = 0; i < headerCells.length; i++) {
     converted += '<th>' + convertInlineStyles(headerCells[i]) + '</th>';
   }
@@ -455,7 +465,7 @@ function convertTable(nodes) {
     const cells = stripExtraPipes(row).split('|');
 
     for (var j = 0; j < cells.length; j++) {
-      converted += '<td>' + convertInlineStyles(cells[j]) + '</td>';
+      converted += '<td' + ' align="' + cellAlignments[j] + '">' + convertInlineStyles(cells[j]) + '</td>';
     }
 
     converted += '</tr>';
