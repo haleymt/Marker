@@ -83,6 +83,7 @@ blockquote {
 table {
   border-collapse: collapse;
   border: 1px solid gray;
+  max-width: 100%;
 }
 
 tbody tr:nth-child(odd) {
@@ -92,4 +93,6 @@ tbody tr:nth-child(odd) {
 td, th {
   border: 1px solid gray;
   padding: 10px;
+  word-wrap: break-word;
+  word-break: break-all;
 }
