@@ -25,7 +25,7 @@ function isTaskListLine(line) {
 function isHR(line) {
   const noSpaces = line.replace(/\s+/g, '');
   const matches = noSpaces.match(/(.)\1*/);
-  return (matches && matches[0] === noSpaces && (noSpaces[0] === '*' || noSpaces[0] === '-'));
+  return (matches && matches[0] === noSpaces && (noSpaces[0] === '*' || noSpaces[0] === '-' || noSpaces[0] === '_'));
 }
 
 function stripExtraPipes(line) {
@@ -44,6 +44,11 @@ function countTableCells(l) {
   }
 
   return count;
+}
+
+function countLeadingSpaces(string) {
+  const spaces = string.match(/^\s+/);
+  return spaces ? spaces[0].length : 0;
 }
 
 /* GET FUNCTIONS
@@ -65,19 +70,14 @@ function getLink(text) {
     linkIndex += 1;
 
   const content = text.slice(1, titleIndex).trim();
-  let link = text.slice(titleIndex + 2, linkIndex + titleIndex).trim();
-  const linkWords = link.split(' "');
-  const title = linkWords[linkWords.length - 1] || link;
+  let url = text.slice(titleIndex + 2, linkIndex + titleIndex).trim();
+  const linkWords = url.split(' "');
+  const title = linkWords[linkWords.length - 1] || url;
 
-  if (link.slice(0, 4) !== 'http')
-    link = 'http://' + link;
+  if (url.slice(0, 4) !== 'http')
+    url = 'http://' + url;
 
-  return { title, link, content, offset: linkIndex + titleIndex };
-}
-
-function getLeadingSpaces(string) {
-  const spaces = string.match(/^\s+/);
-  return spaces ? spaces[0].length : 0;
+  return { title, url, content, offset: linkIndex + titleIndex };
 }
 
 function getCellAlignments(line) {
@@ -113,8 +113,8 @@ function getLastValidListIndex(nodes) {
       }
     }
 
-    const leadingSpaces = getLeadingSpaces(node);
-    const nextLeadingSpaces = getLeadingSpaces(nodes[i + 1]);
+    const leadingSpaces = countLeadingSpaces(node);
+    const nextLeadingSpaces = countLeadingSpaces(nodes[i + 1]);
 
     const asteriskIndex = node.indexOf('*');
     const periodIndex = node.indexOf('.');
@@ -146,7 +146,7 @@ function getLastValidListIndex(nodes) {
     }
 
     if (leadingSpaces > nextLeadingSpaces) {
-      const lastIndex = _.findLastIndex(nodes.slice(0, i), (n) => getLeadingSpaces(n) === nextLeadingSpaces); // eslint-disable-line
+      const lastIndex = _.findLastIndex(nodes.slice(0, i), (n) => countLeadingSpaces(n) === nextLeadingSpaces); // eslint-disable-line
 
       if (lastIndex === -1) {
         return lastValidIndex;
@@ -398,7 +398,7 @@ function convertLinks(text) {
 
 function convertInlineStyles(str) {
   const string = convertLinks(str);
-  const codeIndexes = [];
+  let codeIndexes = [];
   const nodes = [];
 
   /* converts nodes by order of priority
@@ -413,7 +413,7 @@ function convertInlineStyles(str) {
       let endIndex = string.slice(i + 1).indexOf('`');
       if (endIndex > -1) {
         endIndex = endIndex + i + 1;
-        codeIndexes.concat([i, endIndex]);
+        codeIndexes = codeIndexes.concat([i, endIndex]);
         nodes.push({ type: 'code', startIndex: i, endIndex });
       }
     } else if (link && (!string[i - 1] || string[i - 1] !== '!')) {
@@ -424,14 +424,7 @@ function convertInlineStyles(str) {
     } else if (string[i] === '!' && string[i + 1]) {
       const img = getLink(string.slice(i + 1));
       if (img) {
-        nodes.push({
-          type: 'img',
-          alt: img.content,
-          url: img.link,
-          title: img.title,
-          startIndex: i,
-          endIndex: img.offset + i + 1
-        });
+        nodes.push({ type: 'img', img, startIndex: i, endIndex: img.offset + i + 1 });
       }
     }
   }
@@ -447,9 +440,9 @@ function convertInlineStyles(str) {
       converted += convertEmphasis(string.slice(sliceStart, sliceEnd));
 
       if (node.type === 'link') {
-        converted += `<a href="${node.link.link}" target="_blank" title="${node.link.title}">${node.link.content}</a>`;
+        converted += `<a href="${node.link.url}" target="_blank" title="${node.link.title}">${node.link.content}</a>`;
       } else if (node.type === 'img') {
-        converted += `<img src="${node.url}" title="${node.title}" alt="${node.alt}" />`;
+        converted += `<img src="${node.img.url}" title="${node.img.title}" alt="${node.img.content}" />`;
       } else {
         converted += '<code>' + escapeHTML(string.slice(sliceEnd + 1, node.endIndex)) + '</code>';
       }
@@ -508,7 +501,7 @@ function convertList(nodes, type) {
       if (taskList) {
         slice = nodes[i].indexOf(']') + 1;
       } else {
-        const leadingSpaces = getLeadingSpaces(nodes[i]);
+        const leadingSpaces = countLeadingSpaces(nodes[i]);
         slice = nodes[i][leadingSpaces] === '*' ? nodes[i].indexOf('*') + 1 : nodes[i].indexOf('.') + 1;
       }
 
@@ -521,11 +514,11 @@ function convertList(nodes, type) {
       converted += convertInlineStyles(nodes[i].slice(slice));
 
       if (nodes[i + 1] && !taskList) {
-        const nextLeadingSpaces = getLeadingSpaces(nodes[i + 1]);
+        const nextLeadingSpaces = countLeadingSpaces(nodes[i + 1]);
 
         if (leadingSpaces < nextLeadingSpaces) {
           const listType = isNaN(parseInt(nodes[i + 1][nextLeadingSpaces], 10)) ? 'ul' : 'ol';
-          let endIndex = _.findIndex(nodes.slice(i + 1), (n) => getLeadingSpaces(n) === leadingSpaces); // eslint-disable-line
+          let endIndex = _.findIndex(nodes.slice(i + 1), (n) => countLeadingSpaces(n) === leadingSpaces); // eslint-disable-line
           endIndex = endIndex > -1 ? endIndex + i + 1 : nodes.length;
 
           converted += convertList(nodes.slice(i + 1, endIndex), listType) + '</li>';
@@ -581,8 +574,10 @@ function convertAll(html) {
       converted += '<blockquote><div class="blockquote-bar"></div>' + convertAll(children.join('<br>')) + '</blockquote>';
       i = lastIndex - 1;
 
+      // is hr
     } else if (nodeType.type === 'hr') {
       converted += '<hr>';
+
       // is paragraph
     } else {
       lastIndex = getLastValidIndex(currentLines, 'p') + i;
