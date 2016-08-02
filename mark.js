@@ -497,11 +497,11 @@ function convertList(nodes, type) {
     for (let i = 0; i < nodes.length; i++) {
       let slice;
       const taskList = isTaskListLine(nodes[i]);
+      const leadingSpaces = countLeadingSpaces(nodes[i]);
 
       if (taskList) {
         slice = nodes[i].indexOf(']') + 1;
       } else {
-        const leadingSpaces = countLeadingSpaces(nodes[i]);
         slice = nodes[i][leadingSpaces] === '*' ? nodes[i].indexOf('*') + 1 : nodes[i].indexOf('.') + 1;
       }
 
