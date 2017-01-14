@@ -1,5 +1,47 @@
+@keyframes easeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes easeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes easeInRight {
+  from {
+    opacity: 0;
+    right: -600px;
+  }
+  to {
+    opacity: 1;
+    right: 0px;
+  }
+}
+
+@keyframes easeInRight {
+  from {
+    opacity: 0;
+    right: -600px;
+  }
+  to {
+    opacity: 1;
+    right: 0px;
+  }
+}
+
+
 body {
   background: rgba(0,0,0,0.05);
+  font-family: sans-serif;
 }
 
 #main {
@@ -8,10 +50,6 @@ body {
   width: calc(100% - 60px);
   padding: 30px;
   overflow: auto;
-}
-
-h1 {
-  font-family: sans-serif;
 }
 
 .panel {
@@ -26,12 +64,6 @@ h1 {
 
 #panel2 {
   float: right;
-}
-
-code {
-  background: rgba(0,0,0,0.0.5) !important;
-  border-radius: 3px;
-  border: 1px solid rgba(0,0,0,0.0.1) !important;
 }
 
 #converted, #text {
@@ -53,23 +85,45 @@ code {
   opacity: 0.5;
 }
 
+.page-header {
+  font-size: 53px;
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  justify-content: center;
+}
+
+.marker-img {
+  margin-right: 13px;
+  margin-top: -13px
+}
+
 .buttons {
   margin-bottom: 15px;
 }
 
 button {
-  border: 1px solid #02CEFF;
+  border: 2px solid #02CEFF;
   border-radius: 3px;
   background: #71d4ec;
   color: white;
   padding: 5px 10px;
   margin: 10px;
+  outline: none !important;
 }
 
 button:hover {
   cursor: pointer;
-  background: darken(#71d4ec, 15%);
+  background: rgba(113, 212, 236, 0.85);
+  border-color: rgba(113, 212, 236, 0.85);
 }
+
+button:focus {
+  background: rgba(113, 212, 236, 0.6);
+  border-color: rgba(113, 212, 236, 0.6);
+}
+
+
 
 ul.task-list {
   list-style-type: none;
@@ -99,4 +153,57 @@ td, th {
 
 img {
   max-width: 100%;
+}
+
+pre {
+  background: rgba(0,0,0,0.02);
+  border-radius: 3px;
+  border: 1px solid rgba(0,0,0,0.1);
+  padding: 2px 3px;
+}
+
+code {
+  background: rgba(0,0,0,0.02);
+  border-radius: 3px;
+  border: 1px solid rgba(0,0,0,0.1);
+  padding: 2px 3px;
+}
+
+pre code {
+  background: transparent;
+  border: none;
+  padding: 0px;
+}
+
+.info-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.3);
+  overflow: hidden;
+  -webkit-animation: 0.1s easeIn;
+  -o-animation: 0.1s easeIn;
+  animation: 0.1s easeIn;
+}
+
+.info-modal.open {
+  display: block;
+}
+
+.modal-body {
+  width: 600px;
+  padding: 40px;
+  max-width: 80%;
+  position: fixed;
+  background-color: white;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  overflow-y: auto;
+  -webkit-animation: 0.3s easeInRight;
+  -o-animation: 0.3s easeInRight;
+  animation: 0.3s easeInRight;
 }

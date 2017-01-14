@@ -2,12 +2,16 @@
 <html>
   <head>
     <title>Marker</title>
-    <link rel='shortcut icon' href='favicon.ico' type='image/x-icon'/>
+    <link rel='shortcut icon' href='myfavicon.ico' type='image/x-icon'/>
     <link rel="stylesheet" type="text/css" href="./mark.css">
   </head>
   <body>
     <div id="main">
-      <h1>Markdown Converter</h1>
+      <h1 class="page-header"><img src="./whole_marker.png" height="60" class="marker-img"/>Marker</h1>
+      <div>
+          Marker converts markdown syntax to an HTML string. Need a refresher?
+          <button id="infoModalTrigger">Click here</button>
+      </div>
       <div class="buttons">
         <button id="convert">Convert</button>
         <button id="clear">Clear</button>
@@ -18,6 +22,91 @@
       <div class="panel" id="panel2">
         <div id="converted">
           <em class="placeholder">Your text will appear here</em>
+        </div>
+      </div>
+    </div>
+    <div class="info-modal" id="infoModal">
+      <div class="modal-body">
+        <h2>Marker will convert the following syntax:</h2>
+        <div class="info-section">
+          <h3>Inline Styles</h3>
+          <div>
+            <p>*emphasis* and _emphasis_</p>
+            <p><code>&lt;em&gt; emphasis &lt;/em&gt;</code></p>
+            <p><em>emphasis</em></p>
+          </div>
+          <div>
+            <p>**strong** and __strong__</p>
+            <p><code>&lt;strong&gt; strong &lt;/strong&gt;</code></p>
+            <p><strong>strong</strong></p>
+          </div>
+          <div>
+            <p>`inline code`</p>
+            <p><code>&lt;code&gt; inline code &lt;/code&gt;</code></p>
+            <p><code>emphasis</code></p>
+          </div>
+        </div>
+        <div class="info-section">
+          <h3>Links</h3>
+          <p>[ this links to google ](google.com "A Title")</p>
+          <p><code>&lt;a href="http://google.com" title="A Title"&gt; this links to google &lt;/a&gt;</code></p>
+          <p><a href="http://google.com" title="A Title">this links to google</a></p>
+        </div>
+        <div class="info-section">
+          <h3>Horizontal Rules</h3>
+          <p>* * *</p>
+          <p>- - -</p>
+          <p>***</p>
+          <p>---</p>
+          <p><code>&lt;hr&gt;</code></p>
+          <p><hr></p>
+        </div>
+        <div class="info-section">
+          <h3>Paragraphs</h3>
+          <p>Two new lines will create a new paragraph. One will create a <code>&lt;br&gt;</code>:</p>
+          <p>This is my first paragraph of text.</p>
+          <p>This is the paragraph's second line.</p>
+          <br>
+          <p>This is the second paragraph.</p>
+          <p>This is the second paragraph's second line.</p>
+          <pre><code>
+            <p>&lt;p&gt;</p>
+            <p>This is my first paragraph of text.&lt;br&gt;</p>
+            <p>This is the paragraph's second line.</p>
+            <p>&lt;/p&gt;</p>
+            <p>&lt;p&gt;</p>
+            <p>This is the second paragraph.&lt;br&gt;</p>
+            <p>This is the second paragraph's second line.</p>
+          </code></pre>
+        </div>
+        <div class="info-section">
+          <h3>Code Blocks</h3>
+          <p>```</p>
+          <p>this is some fake</p>
+          <p>multi-line code</p>
+          <p>```</p>
+          <pre><code>
+          <p>&lt;pre&gt;&lt;code&gt;</p>
+          <p>This is some fake</p>
+          <p>multi-line code</p>
+          <p>&lt;/code&gt;&lt;/pre&gt;</p>
+          </code></pre>
+          <pre><code>
+          <p>This is some fake</p>
+          <p>multi-line code</p>
+          </code></pre>
+        </div>
+        <div class="info-section">
+          <h3>Block Quotes</h3>
+        </div>
+        <div class="info-section">
+          <h3>Headers</h3>
+        </div>
+        <div class="info-section">
+          <h3>Lists</h3>
+        </div>
+        <div class="info-section">
+          <h3>Tables</h3>
         </div>
       </div>
     </div>

@@ -613,6 +613,16 @@ $.extend(Marker.prototype, {
     $('#clear').click(function () {
       _this.clearAll();
     });
+
+    $('#infoModalTrigger').click(function () {
+      $('#infoModal').addClass('open');
+      $('body').css('overflow', 'hidden');
+    });
+
+    $('#infoModal').click(function () {
+      $('#infoModal').removeClass('open');
+      $('body').css('overflow', 'auto');
+    });
   },
 
   convertText: function () {
