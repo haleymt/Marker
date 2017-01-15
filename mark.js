@@ -40,7 +40,7 @@ function countTableCells(l) {
   let count = (line.match(/\|/g) || []).length;
 
   if (count > 0) {
-    count += 1;
+    count ++;
   }
 
   return count;
@@ -172,10 +172,9 @@ function getLastValidTableIndex(nodes) {
   if (!numCells || !nodes[1] || countTableCells(nodes[1]) !== numCells) {
     return lastValidIndex;
   }
-
-  const secondLine = stripExtraPipes(nodes[1]).split('|')
+  const secondLine = stripExtraPipes(nodes[1]).split('|');
   for (var i = 0; i < secondLine.length; i++) {
-    let cell = secondLine[i];
+    let cell = secondLine[i].trim();
     if (cell[0] === ':') {
       cell = cell.slice(1);
     }
@@ -189,11 +188,11 @@ function getLastValidTableIndex(nodes) {
     }
   }
 
-  lastValidIndex += 1;
+  lastValidIndex ++;
 
   for (var j = 2; j < nodes.length; j++) {
     if (countTableCells(nodes[j]) === numCells) {
-      lastValidIndex += 1;
+      lastValidIndex ++;
     } else {
       return lastValidIndex;
     }
@@ -257,6 +256,7 @@ function getNodeType(nodes) {
   }
 
   const tableIndex = getLastValidTableIndex(nodes);
+  console.log(tableIndex);
   if (tableIndex > 0) {
     return { type: 'table', lastIndex: tableIndex };
   }
