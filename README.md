@@ -87,21 +87,21 @@ This is some fake code
 
 ###### Block quotes
 
-\> dflkdjfg       
-\> dfgdfg       
-\> sdfsdf
+\> block line 1       
+\> block line 2       
+\> block line 3
 
 ```
 <blockquote>
-dflkdjfg
-dfgdfg
-sdfsdf
+block line 1
+block line 2
+block line 3
 </blockquote>
 ```
 
-> dflkdjfg
-> dfgdfg
-> sdfsdf
+> block line 1
+> block line 2
+> block line 3
 
 ###### Headers
 
