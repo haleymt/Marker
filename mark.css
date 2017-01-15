@@ -161,6 +161,8 @@ table {
   border-collapse: collapse;
   border: 1px solid gray;
   width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 tbody tr:nth-child(odd) {
@@ -185,8 +187,8 @@ img {
   padding: 0px 10px;
   color: rgba(0,0,0,0.7);
   display: block;
-  margin-top: 10px !important;
-  margin-bottom: 10px !important;
+  margin-top: 15px !important;
+  margin-bottom: 15px !important;
 }
 
 code {
@@ -262,10 +264,12 @@ h3.section-header {
 
 p.color-gray {
   color: rgba(0,0,0,0.7) !important;
+  font-style: italic;
+  margin-bottom: 30px !important;
 }
 
 .info-subsection {
   margin-top: 15px;
   background: rgba(0,0,0,0.04);
-  padding: 5px 15px;
+  padding: 10px 20px;
 }

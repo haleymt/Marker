@@ -27,22 +27,23 @@
     </div>
     <div class="info-modal" id="infoModal">
       <div class="modal-body">
-        <h2>Markdown syntax for Marker</h2>
+        <h2>Markdown Syntax for Marker</h2>
+        <p class="color-gray">Marker uses all of the following syntax. For more examples and information on markdown syntax in general, take a look at <a href="https://daringfireball.net/projects/markdown/syntax" target="_blank">DaringFireball</a> or <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet" target="_blank">this</a> repository.</p>
         <div class="info-section">
           <h3 class="section-header">Inline Styles</h3>
           <div class="info-subsection">
             <p>*emphasis* and _emphasis_</p>
-            <p><code>&lt;em&gt;emphasis&lt;/em&gt;</code></p>
+            <div class="block-code"><code><p>&lt;em&gt;emphasis&lt;/em&gt;</code></p></div>
             <p><em>emphasis</em></p>
           </div>
           <div class="info-subsection">
             <p>**strong** and __strong__</p>
-            <p><code>&lt;strong&gt;strong&lt;/strong&gt;</code></p>
+            <div class="block-code"><code><p>&lt;strong&gt;strong&lt;/strong&gt;</code></p></div>
             <p><strong>strong</strong></p>
           </div>
           <div class="info-subsection">
             <p>`inline code`</p>
-            <p><code>&lt;code&gt;inline code&lt;/code&gt;</code></p>
+            <div class="block-code"><code><p>&lt;code&gt;inline code&lt;/code&gt;</p></code></div>
             <p><code>inline code</code></p>
           </div>
         </div>
@@ -50,7 +51,7 @@
           <h3 class="section-header">Links</h3>
           <div class="info-subsection">
             <p>[ this links to google ](google.com "A Title")</p>
-            <p><code>&lt;a href="http://google.com" title="A Title"&gt; this links to google &lt;/a&gt;</code></p>
+            <div class="block-code"><code><p>&lt;a href="http://google.com" title="A Title"&gt;this links to google&lt;/a&gt;</p></code></div>
             <p><a href="http://google.com" title="A Title">this links to google</a></p>
           </div>
         </div>
@@ -61,15 +62,14 @@
             <p>- - -</p>
             <p>***</p>
             <p>---</p>
-            <p><code>&lt;hr&gt;</code></p>
+            <div class="block-code"><code><p>&lt;hr&gt;</p></code></div>
             <p><hr></p>
           </div>
         </div>
         <div class="info-section">
           <h3 class="section-header">Paragraphs</h3>
+          <p class="color-gray">Two new lines will create a new paragraph. One will create a <code>&lt;br&gt;</code>:</p>
           <div class="info-subsection">
-            <p class="color-gray">Two new lines will create a new paragraph. One will create a <code>&lt;br&gt;</code>:</p>
-            <br>
             <p>This is my first paragraph of text.</p>
             <p>This is the paragraph's second line.</p>
             <br>
@@ -108,6 +108,7 @@
         </div>
         <div class="info-section">
           <h3 class="section-header">Block Quotes</h3>
+          <p class="color-gray">You can use any markdown syntax within a blockquote and Marker will render it.</p>
           <div class="info-subsection">
             <p>> block line 1</p>
             <p>> block line 2</p>
@@ -130,38 +131,39 @@
           <div class="info-subsection">
             <p># H1 or H1</p>
             <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;---</p>
-            <p><code>&lt;h1&gt;H1&lt;/h1&gt;</code></p>
+            <div class="block-code"><code>&lt;h1&gt;H1&lt;/h1&gt;</code></div>
             <h1>H1</h1>
           </div>
           <div class="info-subsection">
             <p>## H2 or H2</p>
             <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;===</p>
-            <p><code>&lt;h2&gt;H2&lt;/h2&gt;</code></p>
+            <div class="block-code"><code>&lt;h2&gt;H2&lt;/h2&gt;</code></div>
             <h2>H2</h2>
           </div>
           <div class="info-subsection">
             <p>### H3</p>
-            <p><code>&lt;h3&gt;H3&lt;/h3&gt;</code></p>
+            <div class="block-code"><code>&lt;h3&gt;H3&lt;/h3&gt;</code></div>
             <h3>H3</h3>
           </div>
           <div class="info-subsection">
             <p>#### H4</p>
-            <p><code>&lt;h4&gt;H4&lt;/h4&gt;</code></p>
+            <div class="block-code"><code>&lt;h4&gt;H4&lt;/h4&gt;</code></div>
             <h4>H4</h4>
           </div>
           <div class="info-subsection">
             <p>##### H5</p>
-            <p><code>&lt;h5&gt;H5&lt;/h5&gt;</code></p>
+            <div class="block-code"><code>&lt;h5&gt;H5&lt;/h5&gt;</code></div>
             <h5>H5</h5>
           </div>
           <div class="info-subsection">
             <p>###### H6</p>
-            <p><code>&lt;h6&gt;H6&lt;/h6&gt;</code></p>
+            <div class="block-code"><code>&lt;h6&gt;H6&lt;/h6&gt;</code></div>
             <h6>H6</h6>
           </div>
         </div>
         <div class="info-section">
           <h3 class="section-header">Lists</h3>
+          <p class="color-gray">You can use inline styles in lists and nest them as much as you like. </p>
           <div class="info-subsection">
             <p>* one</p>
             <p>* two</p>
