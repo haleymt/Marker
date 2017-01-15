@@ -216,6 +216,43 @@
         </div>
         <div class="info-section">
           <h3 class="section-header">Tables</h3>
+          <p>| A&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| &nbsp;&nbsp;Clean&nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Table |</p>
+          <p>| ---------- |:-----------:| ---------------:|</p>
+          <p>| colons&nbsp;&nbsp;&nbsp;| indicate | &nbsp;&nbsp;&nbsp;alignment |</p>
+          <p>| default&nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|   left-aligned |</p>
+          <p>| 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 |</p>
+          <br>
+          <p>A | Messy | Table</p>
+          <p>--- | --- | ---</p>
+          <p>*Will* | `still` | **work**</p>
+          <p>a | b | c</p>
+          <br>
+          <div class="block-code"><code>
+            <p>&lt;table></p>
+            <p>&nbsp;&nbsp;&lt;tr>&lt;th>A&lt;/th>&lt;th>Clean&lt;/th>&lt;th>Table&lt;/th>&lt;/tr></p>
+            <p>&nbsp;&nbsp;&lt;tr>&lt;td>colons&lt;/td>&lt;td>indicate&lt;/td>&lt;td>alignment&lt;/td>&lt;/tr></p>
+            <p>&nbsp;&nbsp;&lt;tr>&lt;td>default&lt;/td>&lt;td>is&lt;/td>&lt;td>left-aligned&lt;/td>&lt;/tr></p>
+            <p>&nbsp;&nbsp;&lt;tr>&lt;td>1&lt;/td>&lt;td>2&lt;/td>&lt;td>3&lt;/td>&lt;/tr></p>
+            <p>&lt;/table></p>
+            <p>&lt;table></p>
+            <p>&nbsp;&nbsp;&lt;tr>&lt;th>A&lt;/th>&lt;th>Messy&lt;/th>&lt;th>Table&lt;/th>&lt;/tr></p>
+            <p>&nbsp;&nbsp;&lt;tr>&lt;td>&lt;em>Will&lt;/em>&lt;/td>&lt;td>&lt;code>still&lt;/code>&lt;/td>&lt;td>&lt;strong>work&lt;/strong>&lt;/td>&lt;/tr></p>
+            <p>&nbsp;&nbsp;&lt;tr>&lt;td>a&lt;/td>&lt;td>b&lt;/td>&lt;td>c&lt;/td>&lt;/tr></p>
+            <p>&lt;/table></p>
+          </code></div>
+          <br>
+          <table>
+            <tr><th>A</th><th class="align-center">Clean</th><th class="align-right">Table</th></tr>
+            <tr><td>colons</td><td class="align-center">indicate</td><td class="align-right">alignment</td></tr>
+            <tr><td>default</td><td class="align-center">is</td><td class="align-right">left-aligned</td></tr>
+            <tr><td>1</td><td class="align-center">2</td><td class="align-right">3</td></tr>
+          </table>
+          <br>
+          <table>
+            <tr><th>A</th><th>Messy</th><th>Table</th></tr>
+            <tr><td><em>Will</em></td><td><code>still</code></td><td><strong>work</strong></td></tr>
+            <tr><td>a</td><td>b</td><td>c</td></tr>
+          </table>
         </div>
       </div>
     </div>

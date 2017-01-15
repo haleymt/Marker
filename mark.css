@@ -137,7 +137,7 @@ blockquote {
 table {
   border-collapse: collapse;
   border: 1px solid gray;
-  max-width: 100%;
+  width: 100%;
 }
 
 tbody tr:nth-child(odd) {
@@ -149,6 +149,16 @@ td, th {
   padding: 10px;
   word-wrap: break-word;
   word-break: break-all;
+}
+
+td.align-center,
+th.align-center {
+  text-align: center;
+}
+
+td.align-right,
+th.align-right {
+  text-align: right;
 }
 
 img {
