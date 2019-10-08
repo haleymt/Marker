@@ -19,13 +19,21 @@ function escapeHTML(text) {
 }
 
 function isTaskListLine(line) {
-  return line[0] === '-' && line[1] === '[' && (line[2] === ']' || (line[2] === 'X' && line[3] === ']'));
+  return (
+    line[0] === '-' &&
+    line[1] === '[' &&
+    (line[2] === ']' || (line[2] === 'X' && line[3] === ']'))
+  );
 }
 
 function isHR(line) {
   const noSpaces = line.replace(/\s+/g, '');
   const matches = noSpaces.match(/(.)\1*/);
-  return (matches && matches[0] === noSpaces && (noSpaces[0] === '*' || noSpaces[0] === '-' || noSpaces[0] === '_'));
+  return (
+    matches &&
+    matches[0] === noSpaces &&
+    (noSpaces[0] === '*' || noSpaces[0] === '-' || noSpaces[0] === '_')
+  );
 }
 
 function stripExtraPipes(line) {
